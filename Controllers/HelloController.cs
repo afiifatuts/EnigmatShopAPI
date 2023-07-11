@@ -42,4 +42,17 @@ public class HelloController
             }
         };
     }
+
+    [HttpGet("{name}")]
+    public string GetWithPathVariable(string name)
+    {
+        return $"Hello {name}";
+    }
+
+    // /api/hello/query-param?name=andi&isActive=true
+    [HttpGet("query-param")]
+    public string GetWithQueryParam([FromQuery] string name, [FromQuery] bool isActive)
+    {
+        return $"Name {name}, isActive: {isActive}";
+    }
 }
