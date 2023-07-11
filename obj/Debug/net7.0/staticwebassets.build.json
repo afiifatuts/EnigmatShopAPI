@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "M0keVMlMdgKlmoa5yGtyxAw4caGcYATBDeMSgWPR3wE=",
+  "Source": "EnigmaShopApi",
+  "BasePath": "_content/EnigmaShopApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
