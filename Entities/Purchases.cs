@@ -12,6 +12,6 @@ public class Purchase
 
     [Column(name: "customer_id")] public Guid CustomerId { get; set; }
 
-    public virtual Customer Customer { get; set; }// -> penanda relasi
+    public virtual Customer? Customer { get; set; }// -> penanda relasi
     public virtual ICollection<PurchaseDetail> PurchaseDetails { get; set; }// -> penanda relasi
 }

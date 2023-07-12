@@ -1,5 +1,6 @@
 using EnigmaShopApi.Repositories;
 using Microsoft.EntityFrameworkCore;
+using EnigmaShopApi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,10 @@ singleton -> object dibuat cuma 1 kali dan dipakai selama aplikasi itu hidup
 scoped -> hidup selama ada yang request contohnya database
 transient -> hidup selama ada request contoh ketika hit API
 */
-builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>)); //-> Kalau datanya generic
-builder.Services.AddTransient<IPersistance, DbPersistence>();
+builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //-> Kalau datanya generic
+builder.Services.AddScoped<IPersistance, DbPersistence>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IPurchaseService, PurchaseService>();
 
 
 var app = builder.Build();

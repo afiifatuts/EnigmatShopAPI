@@ -11,6 +11,6 @@ public class PurchaseDetail
     [Column(name: "product_id")] public Guid ProductId { get; set; }
     [Column(name: "qty")] public int Qty { get; set; }
 
-    public virtual Purchase Purchase { get; set; }
-    public virtual Product Product { get; set; }
+    public virtual Purchase? Purchase { get; set; }
+    public virtual Product? Product { get; set; }
 }

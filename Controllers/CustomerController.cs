@@ -33,6 +33,13 @@ public class CustomerController : ControllerBase
         return Ok(customer);
     }
 
+    [HttpGet]
+    public async Task<IActionResult> GetCustomerName([FromQuery] string name, [FromQuery] string email)
+    {
+        var customer = await _customerRepository.FindAsync(customer => customer.CustomerName.Equals(name) && customer.Email.Equals(email));
+        return Ok(customer);
+    }
+
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteCustomer(string id)
     {
