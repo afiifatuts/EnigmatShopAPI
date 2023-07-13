@@ -1,8 +1,15 @@
 using EnigmaShopApi.Repositories;
 using Microsoft.EntityFrameworkCore;
 using EnigmaShopApi.Services;
+using EnigmaShopApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
+//configure Logging
+builder.Host.ConfigureLogging(loggingBuilder =>
+{
+    loggingBuilder.AddConsole();
+    //loggingBuilder.ClearProviders();
+});
 
 // Add services to the container.
 
@@ -27,7 +34,7 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>)); //-> Ka
 builder.Services.AddScoped<IPersistance, DbPersistence>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IPurchaseService, PurchaseService>();
-
+builder.Services.AddTransient<HandleExceptionMiddleware>();
 
 var app = builder.Build();
 
@@ -38,10 +45,18 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseMiddleware<HandleExceptionMiddleware>();
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+// app.Use(async (context, next) =>
+// {
+//     await context.Response.WriteAsync("text middleware 1");
+//     await next();
+// });
 
 app.Run();

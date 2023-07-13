@@ -24,6 +24,7 @@ public class ProductController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAllProduct()
     {
+        //throw new Exception();
         var products = await _productService.GetAll();
         return Ok(products);
     }

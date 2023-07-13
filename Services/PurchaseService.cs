@@ -35,15 +35,21 @@ public class PurchaseService : IPurchaseService
             await _persistence.SaveChangeAsync();
             await _persistence.CommitTransactionAsync();
 
-            var purchaseDetailResponses = new List<PurchaseDetailResponse>();
+            // var purchaseDetailResponses = new List<PurchaseDetailResponse>();
+            // foreach (var pd in purchase.PurchaseDetails)
+            // {
+            //     purchaseDetailResponses.Add( new PurchaseDetailResponse {
+            //         ProductId = pd.ProductId.ToString(),
+            //         Qty = pd.Qty
+            //     });
+            // }
 
-            foreach (var pd in purchase.PurchaseDetails)
+            var purchaseDetailResponses = purchase.PurchaseDetails.Select(pd => new PurchaseDetailResponse
             {
-                purchaseDetailResponses.Add( new PurchaseDetailResponse {
-                    ProductId = pd.ProductId.ToString(),
-                    Qty = pd.Qty
-                });
-            }
+                ProductId = pd.ProductId.ToString(),
+                Qty = pd.Qty
+            }).ToList();
+
 
             TransactionResponse response = new()
             {
