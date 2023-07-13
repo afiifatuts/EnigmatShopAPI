@@ -1,4 +1,7 @@
+using System.Net;
 using EnigmaShopApi.Exceptions;
+using EnigmaShopApi.Dto;
+
 namespace EnigmaShopApi.Middlewares;
 
 public class HandleExceptionMiddleware : IMiddleware
@@ -17,33 +20,37 @@ public class HandleExceptionMiddleware : IMiddleware
         }
         catch (NotFoundException e)
         {
-            _logger.LogError(e.Message);
-
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = 404;
-
-            var error = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Messafe = e.Message
-            };
-            await context.Response.WriteAsJsonAsync(error);
+            await HandleExceptionAsync(context, e);
         }
-    
+
         catch (System.Exception e)
         {
-            _logger.LogError(e.Message);
+            await HandleExceptionAsync(context, e);
+        }
+    }
 
-            context.Response.ContentType = "application/json";
-            context.Response.StatusCode = 500;
+    private static async Task HandleExceptionAsync(HttpContext context, Exception exception)
+    {
+        var error = new Error
+        {
+            StatusCode = context.Response.StatusCode,
+            Message = "Internal server error"
+        };
 
-            var error = new
-            {
-                StatusCode = context.Response.StatusCode,
-                Messafe = "Internal Server Error"
-            };
-    await context.Response.WriteAsJsonAsync(error);
-}
+        switch (exception)
+        {
+            case NotFoundException:
+                error.StatusCode = (int)HttpStatusCode.NotFound;
+                error.Message = exception.Message;
+                context.Response.StatusCode = (int)HttpStatusCode.NotFound;
+                break;
+            case not null:
+                error.StatusCode = (int)HttpStatusCode.InternalServerError;
+                error.Message = exception.Message;
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                break;
+        }
+        await context.Response.WriteAsJsonAsync(error);
     }
 
 }
