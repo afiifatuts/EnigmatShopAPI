@@ -28,4 +28,11 @@ public class ProductController : ControllerBase
         var products = await _productService.GetAll();
         return Ok(products);
     }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetProductById(string id)
+    {
+        var product = await _productService.GetById(id);
+        return Ok(product);
+    }
 }

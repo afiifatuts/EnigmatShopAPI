@@ -1,4 +1,5 @@
 using EnigmaShopApi.Entities;
+using EnigmaShopApi.Exceptions;
 using EnigmaShopApi.Repositories;
 
 namespace EnigmaShopApi.Services;
@@ -32,7 +33,7 @@ public class ProductService : IProductService
         try
         {
             var product = await _repository.FindByIdAsync(Guid.Parse(id));
-            if (product is null) throw new Exception("Product not found");
+            if (product is null) throw new NotFoundException("Product not found");
             return product;
         }
         catch (System.Exception e)

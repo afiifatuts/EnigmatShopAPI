@@ -1,3 +1,4 @@
+using EnigmaShopApi.Exceptions;
 namespace EnigmaShopApi.Middlewares;
 
 public class HandleExceptionMiddleware : IMiddleware
@@ -14,6 +15,21 @@ public class HandleExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
+        catch (NotFoundException e)
+        {
+            _logger.LogError(e.Message);
+
+            context.Response.ContentType = "application/json";
+            context.Response.StatusCode = 404;
+
+            var error = new
+            {
+                StatusCode = context.Response.StatusCode,
+                Messafe = e.Message
+            };
+            await context.Response.WriteAsJsonAsync(error);
+        }
+    
         catch (System.Exception e)
         {
             _logger.LogError(e.Message);
@@ -26,8 +42,8 @@ public class HandleExceptionMiddleware : IMiddleware
                 StatusCode = context.Response.StatusCode,
                 Messafe = "Internal Server Error"
             };
-            await context.Response.WriteAsJsonAsync(error);
-        }
+    await context.Response.WriteAsJsonAsync(error);
+}
     }
 
 }
